@@ -1,0 +1,138 @@
+
+http://127.0.0.1:8500/NFLCode/PredictionCode/CreatePassPressure.cfm
+1. PassPressure
+
+
+http://127.0.0.1:8500/NFLCode/LoadPressureStats2020.cfm - Run Thursday morning to get every game (Pro Football Reference)
+1. Updates SYSSTATS PressureRate dPressureRate 
+
+http://127.0.0.1:8500/NFLCode/PBPSuccessRate2020.cfm - 11:59 AM
+1. btaPBPSuccessRates
+2. PBPSuccessRates
+3. PBPGameProjections
+
+http://127.0.0.1:8500/NFLCode/PlayByPlay/ShowPBPSuccessRate.cfm - 1:03 PM
+1. PBPGameProjections(Deletes all rows for the week)
+2. ADJPBPGameProjections (Deletes all rows for the week)
+3. btaPBPSuccessRates (Deletes all rows)
+4. INSERT btaPBPSuccessRates 
+5. INSERT PBPGameProjections added for the week
+6. INSERT ADJPBPGameProjections added for the week
+
+
+http://127.0.0.1:8500/NFLCode/PlayByPlay/CreateAdjustedPBPStats2020.cfm - 1:05 PM
+1. Deletes all AdjPBPSuccessRates
+2. INSERT AdjPBPSuccessRates
+
+
+http://127.0.0.1:8500/NFLCode/PowerRatingAdj2020.cfm - 12:20 PM Need to run this after you run createBetterThanAVGNFL
+1. Update TEAMS
+	OffTNF = '',
+   OffMNF = '',
+   OffDivGame = '',
+   OffExtraTravel = '',
+   OffBadLoss = '',
+   OffBigWin = '',
+   CoastToCoast = '',
+   ExtraRest = ''
+
+2. Delete from MATCHUPS for PavgDiffVsSpread
+3. UPDATE AvgGameInsights SET AvgGameInsights - AvgOfAllPr = (PowerRating + AdjPowerRating + PowerRatingAdjForOppWithTrending + PowerRatingAdjForOpp)/4
+May want to use this as my Final Power Rating for evaluations...
+4. Sets TEAM.PerformanceRat
+Made up of (Avg(ps) - Avg(expectedps) + Avg(expecteddps) - Avg(dps)) as OverallPerformance - Adjusts score to what they could have scored...
+
+5. Sets Team.ConseqRdCt
+6. SET BetterThanAvg.PowerRatAdjAvg = (PowerPts + PowerPtsAdj)/2
+7. RUNS PowerRating2020.cfm
+        1. Update betterThanAvg.PowerRat2020
+		2. Update betterThanAvg.FinalPowerRat set to SUM(PowerPtsAdj + PowerPts + PowerRat2020)/3
+
+8. INSERT into MATCHUPS 
+	a. Compare Predicted Pavg Diff Versus Spread.
+	b. PavgDiffVsSpread
+
+9. UPDATE Teams for:
+	OffTNF = '',
+   OffMNF = '',
+   OffDivGame = '',
+   OffExtraTravel = '',
+   OffBadLoss = '',
+   OffBigWin = '',
+   CoastToCoast = '',
+   ExtraRest = ''
+
+
+*********************************************************************************
+Now update to current week number http://127.0.0.1:8500/NFLCode/UpdateNFLWeek.cfm
+*********************************************************************************
+
+
+http://127.0.0.1:8500/NFLCode/PlayByPlay/PBPCompareTeams.cfm - 12:50 PM
+1. DELETE FROM TeamRankings
+2. Add TeamRankings for STATTYPE='MATCHUP':
+	a. Best 1st and 2nd Down Running Teams
+    b. Best 1st and 2nd Down Defense Versus The Run
+	c. Best 1st and 2nd Down Passing Teams
+	d. Best 1st and 2nd Down Defense Against The Pass
+	e. Best 3rd Down Passing Teams
+	f. Best 3rd Down Defense Against The Pass
+	g. Best Pass Protection 3rd Down And Long
+	h. Best Pass Pressure 3rd Down And Long
+	 
+	
+3. DELETE FROM MatchUps Where Week = #theweek#
+
+4. INSERT INTO MatchUps for a-h
+5. RankDifferential set for each category in MATCHUPS
+	
+Run http://127.0.0.1:8500/NFLCode/PlayByPlay/ShowPBPSuccessRate.cfm again	
+	
+
+http://127.0.0.1:8500/NFLCode/NFLStatMatchUps.cfm - 1:00 PM
+
+1. Deletes from MATCHUPS
+	a. PressureRating
+	b. PressureDifferential
+	c. OverallMatchupRating
+	d. BiggestMatchupRating
+	e. LiveDogRatAdjForOpp
+	f. LiveDogRat
+	g. FavSitRat
+	h. FavSitRatDiff
+	i. UndSitRat
+	j. UndSitRatDiff
+	k. BigAdvCategory
+	
+2. Needs the following tables:
+		a. GameInsights
+		b. Teams
+		c. PassPressure
+		d. AdjPbPGameProjections
+		e. betterThanAVG
+		f. sysstats
+		g. TeamRankings
+		
+3. Runs ShowMatchupRatings2021.cfm 		
+		
+	
+	a. From MATCHUPS...DELETE OverallMatchupRating
+	b. From MATCHUPS...DELETE BiggestMatchupRating
+	
+
+http://127.0.0.1:8500/NFLCode/PredictionCode/LiveDog2020.cfm - 1:05 PM
+
+http://127.0.0.1:8500/NFLCode/PredictionCode/LiveDog2020AdjForOpp.cfm - 1:10 PM
+
+
+
+
+
+These are the things that need to run in this order:
+1. http://127.0.0.1:8500/NFLCode/NFLStatMatchUps.cfm
+2. http://127.0.0.1:8500/NFLCode/PredictionCode/LiveDog2020.cfm 
+3. http://127.0.0.1:8500/NFLCode/PredictionCode/LiveDog2020AdjForOpp.cfm
+4. http://127.0.0.1:8500/NFLCode/FinalAnalysisForPlayingUnderdog2021.cfm
+ 
+
+

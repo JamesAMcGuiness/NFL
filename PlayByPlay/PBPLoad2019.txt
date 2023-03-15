@@ -1,0 +1,31 @@
+Step1: Find >Kickoff</div>
+
+Loop for Hometeam...
+STEP1: Lookfor= 'class="">SF</a>'
+Set StatPos = found spot
+
+Insert into PbPStatLocation(OffDef,Team,Opp,StatPos) values ('O','#hometeam#','#awayteam#',#FindTeamPos#)
+endloop
+
+
+
+
+
+
+Step2: Find LEFT = '<div class="play-by-play-down-distance"></div>'
+            RIGHT = </td>
+			Result is (15:00 - 1st) M.Wishnowsky kicks 65 yards from SF 35 to end zone Touchback.
+
+
+LEFT = '<div class="play-by-play-down-distance">'
+RIGHT = '</td>'			
+result is: 1 &amp; 10 - CLE 25
+
+Replace ' &amp; ' with '-'
+result is 1-10 - CLE 25
+
+Replace ' ' with ''
+result is 1-10-CLE25
+
+
+Insert into PbPStatLocation(OffDef,Team,Opp,StatPos) values ('O','#hometeam#','#awayteam#',#FindTeamPos#)
